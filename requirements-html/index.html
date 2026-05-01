@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GUC PortfolioHub — Requirements 21–38</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;color:#111827;background:#f9fafb;-webkit-font-smoothing:antialiased}
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .navbar__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .navbar__logo{background:#4f46e5;color:#fff;font-weight:700;font-size:13px;padding:4px 8px;border-radius:6px;letter-spacing:1px}
+  .navbar__title{font-weight:600;font-size:16px;color:#111827}
+  .page{max-width:1100px;margin:0 auto;padding:40px 24px 60px}
+  h1{font-size:28px;font-weight:700;color:#111827;margin:0 0 8px}
+  .sub{font-size:15px;color:#6b7280;margin:0 0 36px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px 22px;text-decoration:none;color:inherit;transition:box-shadow .15s,transform .1s;display:block}
+  .card:hover{box-shadow:0 4px 20px rgba(0,0,0,.09);transform:translateY(-2px)}
+  .card__reqs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .badge{font-size:11px;font-weight:600;background:#e0e7ff;color:#4338ca;padding:2px 8px;border-radius:99px}
+  .card h3{font-size:16px;font-weight:600;color:#111827;margin:0 0 6px}
+  .card p{font-size:13px;color:#6b7280;margin:0}
+  .card__icon{font-size:30px;margin-bottom:10px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;margin-right:4px}
+  .tag--student{background:#d1fae5;color:#065f46}
+  .tag--instructor{background:#fef3c7;color:#92400e}
+  .tag--all{background:#e0e7ff;color:#3730a3}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__brand">
+    <span class="navbar__logo">GUC</span>
+    <span class="navbar__title">PortfolioHub</span>
+  </a>
+</nav>
+<div class="page">
+  <h1>Requirements 21–38</h1>
+  <p class="sub">HTML prototype pages implementing functional requirements 21–38 from the Project Portfolio Web Platform specification.</p>
+  <div class="grid">
+
+    <a href="student-projects.html" class="card">
+      <div class="card__icon">📂</div>
+      <div class="card__reqs">
+        <span class="badge">Req 21</span>
+        <span class="badge">Req 22</span>
+      </div>
+      <h3>My Projects</h3>
+      <p>View all projects list and toggle which appear on the public portfolio.</p>
+      <br><span class="tag tag--student">Student</span>
+    </a>
+
+    <a href="thesis.html" class="card">
+      <div class="card__icon">📄</div>
+      <div class="card__reqs">
+        <span class="badge">Req 23</span>
+        <span class="badge">Req 24</span>
+      </div>
+      <h3>Thesis Management</h3>
+      <p>Upload thesis drafts and designate one as the Final Draft (Bachelor Projects).</p>
+      <br><span class="tag tag--student">Student</span>
+    </a>
+
+    <a href="collaborators.html" class="card">
+      <div class="card__icon">👥</div>
+      <div class="card__reqs">
+        <span class="badge">Req 25</span>
+        <span class="badge">Req 26</span>
+        <span class="badge">Req 27</span>
+        <span class="badge">Req 31</span>
+      </div>
+      <h3>Collaborators</h3>
+      <p>Search, invite, view invitation status, and remove collaborators from a project.</p>
+      <br><span class="tag tag--student">Student</span>
+    </a>
+
+    <a href="invitations.html" class="card">
+      <div class="card__icon">📬</div>
+      <div class="card__reqs">
+        <span class="badge">Req 28</span>
+        <span class="badge">Req 29</span>
+        <span class="badge">Req 30</span>
+      </div>
+      <h3>Project Invitations</h3>
+      <p>Receive notifications for invitations, view invitation list, accept or reject them.</p>
+      <br><span class="tag tag--student">Student</span>
+      <span class="tag tag--instructor">Instructor</span>
+    </a>
+
+    <a href="tasks.html" class="card">
+      <div class="card__icon">✅</div>
+      <div class="card__reqs">
+        <span class="badge">Req 32</span>
+        <span class="badge">Req 33</span>
+        <span class="badge">Req 34</span>
+      </div>
+      <h3>Task Management</h3>
+      <p>Create, view, edit, delete and reorder project tasks with assignments and statuses.</p>
+      <br><span class="tag tag--student">Student</span>
+    </a>
+
+    <a href="notifications.html" class="card">
+      <div class="card__icon">🔔</div>
+      <div class="card__reqs">
+        <span class="badge">Req 35</span>
+        <span class="badge">Req 36</span>
+      </div>
+      <h3>Notifications</h3>
+      <p>View all notifications and mark them as read or unread.</p>
+      <br><span class="tag tag--all">All Users</span>
+    </a>
+
+    <a href="instructor-feedback.html" class="card">
+      <div class="card__icon">💬</div>
+      <div class="card__reqs">
+        <span class="badge">Req 37</span>
+        <span class="badge">Req 38</span>
+      </div>
+      <h3>Instructor Feedback</h3>
+      <p>Add, edit, and remove feedback comments on tasks and on the overall project.</p>
+      <br><span class="tag tag--instructor">Instructor</span>
+    </a>
+
+  </div>
+</div>
+</body>
+</html>
