@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notifications — GUC PortfolioHub</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;color:#111827;background:#f9fafb;-webkit-font-smoothing:antialiased}
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .navbar__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .navbar__logo{background:#4f46e5;color:#fff;font-weight:700;font-size:13px;padding:4px 8px;border-radius:6px;letter-spacing:1px}
+  .navbar__title{font-weight:600;font-size:16px;color:#111827}
+  .navbar__badge{font-size:11px;font-weight:600;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:#e0e7ff;color:#4338ca}
+  .navbar__name{font-size:14px;font-weight:500;color:#374151}
+  .navbar__bell{display:flex;align-items:center;gap:6px;font-size:14px;color:#374151;font-weight:500;position:relative}
+  .bell-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+  .page{max-width:800px;margin:0 auto;padding:32px 24px 60px}
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:#4f46e5;text-decoration:none;font-weight:500;margin-bottom:20px}
+  .back:hover{text-decoration:underline}
+  .req-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+  .req-tag{font-size:12px;font-weight:600;background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:99px}
+  .dash-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
+  .dash-title{font-size:28px;font-weight:700;color:#111827;margin:0 0 4px}
+  .dash-sub{font-size:14px;color:#6b7280;margin:0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;font-family:inherit}
+  .btn--outline{background:#fff;color:#374151;border-color:#d1d5db}
+  .btn--outline:hover{background:#f9fafb}
+  .btn--primary{background:#4f46e5;color:#fff;border-color:#4f46e5}
+  .btn--primary:hover{background:#4338ca}
+  .btn--sm{padding:5px 12px;font-size:12px}
+  /* Filter tabs */
+  .filter-tabs{display:flex;gap:6px;background:#f3f4f6;border-radius:10px;padding:4px;margin-bottom:20px;width:fit-content}
+  .filter-tab{border:none;background:none;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:#6b7280;transition:all .15s;font-family:inherit}
+  .filter-tab--active{background:#fff;color:#4f46e5;box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
+  /* Notif item */
+  .notif-item{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-radius:12px;margin-bottom:8px;border:1px solid #e5e7eb;background:#fff;cursor:pointer;transition:all .15s;position:relative}
+  .notif-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.07)}
+  .notif-item--unread{background:#f5f3ff;border-color:#c7d2fe}
+  .notif-item--unread .notif-msg{font-weight:600;color:#111827}
+  .notif-unread-dot{width:9px;height:9px;background:#4f46e5;border-radius:50%;flex-shrink:0;margin-top:6px}
+  .notif-read-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:6px}
+  .notif-icon{font-size:22px;flex-shrink:0}
+  .notif-body{flex:1;min-width:0}
+  .notif-msg{font-size:14px;color:#374151;margin-bottom:3px}
+  .notif-time{font-size:12px;color:#9ca3af}
+  .notif-type-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;margin-left:6px}
+  .type--invitation{background:#ddd6fe;color:#5b21b6}
+  .type--task{background:#d1fae5;color:#065f46}
+  .type--feedback{background:#fef3c7;color:#92400e}
+  .type--system{background:#f3f4f6;color:#6b7280}
+  .notif-actions{display:flex;gap:6px;flex-shrink:0}
+  /* Stats */
+  .stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+  .stat-pill{background:#fff;border:1px solid #e5e7eb;border-radius:99px;padding:6px 16px;font-size:13px;font-weight:500;color:#374151;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .stat-pill span{font-weight:700;color:#4f46e5}
+  /* Toast */
+  .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast--success{background:#10b981;color:#fff}
+  .toast--info{background:#3b82f6;color:#fff}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__brand">
+    <span class="navbar__logo">GUC</span>
+    <span class="navbar__title">PortfolioHub</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="navbar__bell">
+      🔔
+      <div class="bell-badge" id="bellCount">3</div>
+    </div>
+    <span class="navbar__badge">Student</span>
+    <span class="navbar__name">Ali Hassan</span>
+  </div>
+</nav>
+
+<div class="page">
+  <a href="index.html" class="back">← Back to Requirements Index</a>
+
+  <div class="req-tags">
+    <span class="req-tag">Req 35 — View a list of all my notifications (all user roles)</span>
+    <span class="req-tag">Req 36 — Mark notifications as read/unread</span>
+  </div>
+
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">Notifications</h1>
+      <p class="dash-sub">Stay updated on project activity, invitations, and feedback</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn--outline" onclick="markAllRead()">Mark all as read</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-row" id="statRow"></div>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs">
+    <button class="filter-tab filter-tab--active" onclick="setFilter('all',this)">All <span id="tabAll"></span></button>
+    <button class="filter-tab" onclick="setFilter('unread',this)">Unread <span id="tabUnread"></span></button>
+    <button class="filter-tab" onclick="setFilter('read',this)">Read <span id="tabRead"></span></button>
+  </div>
+
+  <!-- Notification list (Req 35) -->
+  <div id="notifList"></div>
+  <div id="emptyNotif" style="text-align:center;padding:48px;color:#9ca3af;display:none">
+    <div style="font-size:40px;margin-bottom:10px">🔔</div>
+    <div style="font-weight:600;margin-bottom:4px">No notifications here</div>
+    <div style="font-size:13px">Check back later for project updates.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let notifications = [
+  {id:'n1',type:'invitation',icon:'📬',msg:'Sara Ahmed invited you to collaborate on "Mobile App Redesign"',time:'2 minutes ago',isRead:false},
+  {id:'n2',type:'invitation',icon:'📬',msg:'Dr. Sara Mohamed accepted your invitation to join "E-Commerce Platform"',time:'1 hour ago',isRead:false},
+  {id:'n3',type:'task',icon:'✅',msg:'Omar Khalil marked task "Build product listing page" as Completed',time:'3 hours ago',isRead:false},
+  {id:'n4',type:'feedback',icon:'💬',msg:'Dr. Karim Abdelaziz left feedback on task "Implement user authentication"',time:'Yesterday at 2:30 PM',isRead:true},
+  {id:'n5',type:'feedback',icon:'💬',msg:'Dr. Sara Mohamed added a general comment on your project "E-Commerce Platform"',time:'Yesterday at 10:00 AM',isRead:true},
+  {id:'n6',type:'invitation',icon:'📬',msg:'Hassan Ibrahim rejected your invitation to join "E-Commerce Platform"',time:'2 days ago',isRead:true},
+  {id:'n7',type:'task',icon:'✅',msg:'Sara Ahmed updated task "Implement shopping cart" status to Postponed',time:'3 days ago',isRead:true},
+  {id:'n8',type:'system',icon:'🔔',msg:'Your project "Database Query Optimizer" is now public and visible to employers',time:'1 week ago',isRead:true},
+];
+let activeFilter = 'all';
+
+function setFilter(f,el){
+  activeFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('filter-tab--active'));
+  el.classList.add('filter-tab--active');
+  render();
+}
+
+function toggleRead(id){
+  notifications = notifications.map(n=>n.id===id?{...n,isRead:!n.isRead}:n);
+  render();
+}
+
+function markAllRead(){
+  notifications = notifications.map(n=>({...n,isRead:true}));
+  showToast('All notifications marked as read.','success');
+  render();
+}
+
+function render(){
+  const filtered = activeFilter==='all'?notifications
+    :activeFilter==='unread'?notifications.filter(n=>!n.isRead)
+    :notifications.filter(n=>n.isRead);
+
+  const list = document.getElementById('notifList');
+  const empty = document.getElementById('emptyNotif');
+  const unreadCount = notifications.filter(n=>!n.isRead).length;
+
+  document.getElementById('bellCount').textContent = unreadCount;
+  document.getElementById('bellCount').style.display = unreadCount>0?'flex':'none';
+  document.getElementById('tabAll').textContent=`(${notifications.length})`;
+  document.getElementById('tabUnread').textContent=`(${notifications.filter(n=>!n.isRead).length})`;
+  document.getElementById('tabRead').textContent=`(${notifications.filter(n=>n.isRead).length})`;
+
+  const statRow = document.getElementById('statRow');
+  statRow.innerHTML=`
+    <div class="stat-pill">Total: <span>${notifications.length}</span></div>
+    <div class="stat-pill">Unread: <span>${notifications.filter(n=>!n.isRead).length}</span></div>
+    <div class="stat-pill">Invitations: <span>${notifications.filter(n=>n.type==='invitation').length}</span></div>
+    <div class="stat-pill">Task Updates: <span>${notifications.filter(n=>n.type==='task').length}</span></div>
+    <div class="stat-pill">Feedback: <span>${notifications.filter(n=>n.type==='feedback').length}</span></div>
+  `;
+
+  if(filtered.length===0){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+
+  list.innerHTML = filtered.map(n=>`
+    <div class="notif-item ${n.isRead?'':'notif-item--unread'}" onclick="toggleRead('${n.id}')">
+      ${n.isRead?'<div class="notif-read-dot"></div>':'<div class="notif-unread-dot"></div>'}
+      <div class="notif-icon">${n.icon}</div>
+      <div class="notif-body">
+        <div class="notif-msg">${n.msg}
+          <span class="notif-type-tag type--${n.type}">${n.type}</span>
+        </div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+      <div class="notif-actions">
+        <button class="btn btn--outline btn--sm" onclick="event.stopPropagation();toggleRead('${n.id}')">
+          ${n.isRead?'Mark unread':'Mark read'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=`toast toast--${type} show`;
+  setTimeout(()=>t.className='toast',3500);
+}
+
+render();
+</script>
+</body>
+</html>

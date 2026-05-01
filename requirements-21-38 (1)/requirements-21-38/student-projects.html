@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Projects — GUC PortfolioHub</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;color:#111827;background:#f9fafb;-webkit-font-smoothing:antialiased}
+  /* Navbar */
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .navbar__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .navbar__logo{background:#4f46e5;color:#fff;font-weight:700;font-size:13px;padding:4px 8px;border-radius:6px;letter-spacing:1px}
+  .navbar__title{font-weight:600;font-size:16px;color:#111827}
+  .navbar__links{display:flex;align-items:center;gap:8px}
+  .navbar__link{text-decoration:none;color:#374151;font-size:14px;font-weight:500;padding:6px 12px;border-radius:6px;transition:background .15s}
+  .navbar__link:hover{background:#f3f4f6}
+  .navbar__user{display:flex;align-items:center;gap:8px;margin-left:12px;padding-left:12px;border-left:1px solid #e5e7eb}
+  .navbar__badge{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:99px;background:#e0e7ff;color:#4338ca}
+  .navbar__name{font-size:14px;font-weight:500;color:#374151}
+  /* Page */
+  .page{max-width:1100px;margin:0 auto;padding:32px 24px 60px}
+  .dash-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
+  .dash-title{font-size:28px;font-weight:700;color:#111827;margin:0 0 4px}
+  .dash-sub{font-size:14px;color:#6b7280;margin:0}
+  /* Req badges */
+  .req-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+  .req-tag{font-size:12px;font-weight:600;background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:99px}
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;font-family:inherit}
+  .btn--primary{background:#4f46e5;color:#fff;border-color:#4f46e5}
+  .btn--primary:hover{background:#4338ca}
+  .btn--outline{background:#fff;color:#374151;border-color:#d1d5db}
+  .btn--outline:hover{background:#f9fafb}
+  .btn--danger{background:#fff;color:#dc2626;border-color:#fca5a5}
+  .btn--danger:hover{background:#fee2e2}
+  .btn--sm{padding:6px 14px;font-size:13px}
+  /* Card */
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:16px}
+  .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+  .card-title{font-size:16px;font-weight:600;color:#111827;margin:0}
+  /* Project list */
+  .proj-table{width:100%;border-collapse:collapse}
+  .proj-table th{text-align:left;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;padding:0 14px 10px;border-bottom:1px solid #e5e7eb}
+  .proj-table td{padding:14px;border-bottom:1px solid #f3f4f6;vertical-align:middle;font-size:14px}
+  .proj-table tr:last-child td{border-bottom:none}
+  .proj-table tr:hover td{background:#f9fafb}
+  .proj-title{font-weight:600;color:#111827}
+  .proj-course{font-size:12px;color:#6b7280;margin-top:2px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;border:1px solid}
+  .tag--public{background:#d1fae5;color:#065f46;border-color:#a7f3d0}
+  .tag--private{background:#f3f4f6;color:#6b7280;border-color:#e5e7eb}
+  .tag--bachelor{background:#fef3c7;color:#92400e;border-color:#fde68a}
+  .tag--course{background:#e0e7ff;color:#3730a3;border-color:#c7d2fe}
+  /* Toggle switch */
+  .toggle-wrap{display:flex;align-items:center;gap:8px}
+  .toggle{position:relative;display:inline-block;width:38px;height:22px}
+  .toggle input{opacity:0;width:0;height:0}
+  .slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;border-radius:99px;transition:.2s}
+  .slider::before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  input:checked+.slider{background:#4f46e5}
+  input:checked+.slider::before{transform:translateX(16px)}
+  .toggle-label{font-size:13px;color:#374151;font-weight:500}
+  /* Actions */
+  .actions-row{display:flex;gap:6px}
+  /* Stat cards */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:24px}
+  .stat-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .stat-card__num{font-size:32px;font-weight:700;color:#4f46e5}
+  .stat-card__label{font-size:13px;color:#6b7280}
+  /* Toast */
+  .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast--success{background:#10b981;color:#fff}
+  .toast--info{background:#3b82f6;color:#fff}
+  /* Back */
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:#4f46e5;text-decoration:none;font-weight:500;margin-bottom:20px}
+  .back:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__brand">
+    <span class="navbar__logo">GUC</span>
+    <span class="navbar__title">PortfolioHub</span>
+  </a>
+  <div class="navbar__links">
+    <div class="navbar__user">
+      <span class="navbar__badge">Student</span>
+      <span class="navbar__name">Ali Hassan</span>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <a href="index.html" class="back">← Back to Requirements Index</a>
+
+  <div class="req-tags">
+    <span class="req-tag">Req 21 — View list of all my projects</span>
+    <span class="req-tag">Req 22 — Select projects visible on portfolio</span>
+  </div>
+
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">My Projects</h1>
+      <p class="dash-sub">Manage your projects and control which ones appear on your public portfolio</p>
+    </div>
+    <button class="btn btn--primary" onclick="openNewProjectModal()">+ New Project</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid" id="statsGrid"></div>
+
+  <!-- Projects table -->
+  <div class="card">
+    <div class="card-header-row">
+      <h2 class="card-title">All Projects</h2>
+      <span style="font-size:13px;color:#6b7280">Toggle <strong>Show on Portfolio</strong> to control public visibility (Req 22)</span>
+    </div>
+    <table class="proj-table" id="projTable">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Type</th>
+          <th>Languages</th>
+          <th>Show on Portfolio</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="projTbody"></tbody>
+    </table>
+    <div id="emptyState" style="text-align:center;padding:40px;color:#9ca3af;display:none">
+      <div style="font-size:36px;margin-bottom:8px">📂</div>
+      <div style="font-weight:600;margin-bottom:4px">No projects yet</div>
+      <div style="font-size:13px">Click "New Project" to create your first project.</div>
+    </div>
+  </div>
+</div>
+
+<!-- New/Edit Project Modal -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:16px;padding:32px;width:100%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,.15)">
+    <h2 style="margin:0 0 20px;font-size:20px;font-weight:700" id="modalTitle">New Project</h2>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:5px">Project Title *</label>
+        <input id="f_title" type="text" placeholder="e.g. E-Commerce Platform" style="width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 13px;font-size:14px;color:#111827;outline:none;font-family:inherit">
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:5px">Course *</label>
+        <select id="f_course" style="width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 13px;font-size:14px;color:#111827;outline:none;font-family:inherit;background:#fff">
+          <option value="">Select a course...</option>
+          <option value="Bachelor Project">Bachelor Project</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Database Systems">Database Systems</option>
+          <option value="Software Engineering">Software Engineering</option>
+          <option value="Machine Learning">Machine Learning</option>
+          <option value="Mobile Development">Mobile Development</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:5px">GitHub Link</label>
+        <input id="f_github" type="url" placeholder="https://github.com/..." style="width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 13px;font-size:14px;color:#111827;outline:none;font-family:inherit">
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:500;color:#374151;display:block;margin-bottom:5px">Demo Video URL</label>
+        <input id="f_demo" type="url" placeholder="https://youtube.com/..." style="width:100%;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 13px;font-size:14px;color:#111827;outline:none;font-family:inherit">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:24px;justify-content:flex-end">
+      <button class="btn btn--outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn--primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LANGS_SHORT = ['JS','Python','Java','C++','TypeScript','Go','PHP','Swift'];
+let projects = [
+  {id:'p1',title:'E-Commerce Platform',course:'Web Development',isBachelor:false,langs:['JS','TypeScript'],github:'https://github.com/ali/ecommerce',demo:'',showOnPortfolio:true,createdAt:'2025-09-15'},
+  {id:'p2',title:'Smart Campus Navigation',course:'Bachelor Project',isBachelor:true,langs:['Python','JS'],github:'https://github.com/ali/smart-campus',demo:'https://youtube.com/xyz',showOnPortfolio:true,createdAt:'2025-11-01'},
+  {id:'p3',title:'Database Query Optimizer',course:'Database Systems',isBachelor:false,langs:['Java','C++'],github:'',demo:'',showOnPortfolio:false,createdAt:'2025-12-10'},
+  {id:'p4',title:'ML Image Classifier',course:'Machine Learning',isBachelor:false,langs:['Python'],github:'https://github.com/ali/img-classify',demo:'',showOnPortfolio:false,createdAt:'2026-01-20'},
+];
+let editingId = null;
+
+function renderStats(){
+  const total = projects.length;
+  const visible = projects.filter(p=>p.showOnPortfolio).length;
+  const bach = projects.filter(p=>p.isBachelor).length;
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="stat-card"><div class="stat-card__num">${total}</div><div class="stat-card__label">Total Projects</div></div>
+    <div class="stat-card"><div class="stat-card__num">${visible}</div><div class="stat-card__label">On Portfolio</div></div>
+    <div class="stat-card"><div class="stat-card__num">${total-visible}</div><div class="stat-card__label">Private</div></div>
+    <div class="stat-card"><div class="stat-card__num">${bach}</div><div class="stat-card__label">Bachelor Projects</div></div>
+  `;
+}
+
+function renderProjects(){
+  renderStats();
+  const tbody = document.getElementById('projTbody');
+  const empty = document.getElementById('emptyState');
+  if(projects.length===0){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML = projects.map(p=>`
+    <tr>
+      <td>
+        <div class="proj-title">${p.title}</div>
+        <div class="proj-course">${p.course} &bull; ${p.createdAt}</div>
+        ${p.github?`<a href="${p.github}" target="_blank" style="font-size:12px;color:#4f46e5">GitHub ↗</a>`:''}
+      </td>
+      <td>
+        <span class="tag ${p.isBachelor?'tag--bachelor':'tag--course'}">${p.isBachelor?'Bachelor Project':'Course Project'}</span>
+      </td>
+      <td>
+        ${p.langs.map(l=>`<span style="font-size:11px;background:#f3f4f6;border-radius:4px;padding:2px 7px;margin-right:3px;color:#374151">${l}</span>`).join('')}
+      </td>
+      <td>
+        <label class="toggle-wrap">
+          <label class="toggle">
+            <input type="checkbox" ${p.showOnPortfolio?'checked':''} onchange="togglePortfolio('${p.id}')">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label">${p.showOnPortfolio?'<span style="color:#059669;font-size:12px">Visible</span>':'<span style="color:#9ca3af;font-size:12px">Hidden</span>'}</span>
+        </label>
+      </td>
+      <td>
+        <div class="actions-row">
+          <button class="btn btn--outline btn--sm" onclick="editProject('${p.id}')">Edit</button>
+          <button class="btn btn--danger btn--sm" onclick="deleteProject('${p.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function togglePortfolio(id){
+  projects = projects.map(p=>p.id===id?{...p,showOnPortfolio:!p.showOnPortfolio}:p);
+  const proj = projects.find(p=>p.id===id);
+  showToast(proj.showOnPortfolio?'Project added to portfolio':'Project hidden from portfolio','success');
+  renderProjects();
+}
+
+function openNewProjectModal(){
+  editingId=null;
+  document.getElementById('modalTitle').textContent='New Project';
+  document.getElementById('f_title').value='';
+  document.getElementById('f_course').value='';
+  document.getElementById('f_github').value='';
+  document.getElementById('f_demo').value='';
+  document.getElementById('modal').style.display='flex';
+}
+
+function editProject(id){
+  const p = projects.find(x=>x.id===id);
+  editingId=id;
+  document.getElementById('modalTitle').textContent='Edit Project';
+  document.getElementById('f_title').value=p.title;
+  document.getElementById('f_course').value=p.course;
+  document.getElementById('f_github').value=p.github||'';
+  document.getElementById('f_demo').value=p.demo||'';
+  document.getElementById('modal').style.display='flex';
+}
+
+function closeModal(){document.getElementById('modal').style.display='none';}
+
+function saveProject(){
+  const title = document.getElementById('f_title').value.trim();
+  const course = document.getElementById('f_course').value;
+  if(!title){showToast('Project title is required.','error');return;}
+  if(!course){showToast('Please select a course.','error');return;}
+  if(editingId){
+    projects = projects.map(p=>p.id===editingId?{...p,title,course,isBachelor:course==='Bachelor Project',github:document.getElementById('f_github').value,demo:document.getElementById('f_demo').value}:p);
+    showToast('Project updated!','success');
+  } else {
+    projects.push({id:'p'+Date.now(),title,course,isBachelor:course==='Bachelor Project',langs:[],github:document.getElementById('f_github').value,demo:document.getElementById('f_demo').value,showOnPortfolio:false,createdAt:new Date().toISOString().slice(0,10)});
+    showToast('Project created!','success');
+  }
+  closeModal();
+  renderProjects();
+}
+
+function deleteProject(id){
+  if(!confirm('Delete this project? This cannot be undone.'))return;
+  projects = projects.filter(p=>p.id!==id);
+  showToast('Project deleted.','info');
+  renderProjects();
+}
+
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=`toast toast--${type} show`;
+  setTimeout(()=>t.className='toast',3000);
+}
+
+renderProjects();
+</script>
+</body>
+</html>

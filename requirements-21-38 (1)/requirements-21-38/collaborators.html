@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Collaborators — GUC PortfolioHub</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;color:#111827;background:#f9fafb;-webkit-font-smoothing:antialiased}
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .navbar__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .navbar__logo{background:#4f46e5;color:#fff;font-weight:700;font-size:13px;padding:4px 8px;border-radius:6px;letter-spacing:1px}
+  .navbar__title{font-weight:600;font-size:16px;color:#111827}
+  .navbar__badge{font-size:11px;font-weight:600;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:#e0e7ff;color:#4338ca}
+  .navbar__name{font-size:14px;font-weight:500;color:#374151}
+  .page{max-width:1000px;margin:0 auto;padding:32px 24px 60px}
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:#4f46e5;text-decoration:none;font-weight:500;margin-bottom:20px}
+  .back:hover{text-decoration:underline}
+  .req-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+  .req-tag{font-size:12px;font-weight:600;background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:99px}
+  .dash-header{margin-bottom:28px}
+  .dash-title{font-size:28px;font-weight:700;color:#111827;margin:0 0 4px}
+  .dash-sub{font-size:14px;color:#6b7280;margin:0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;font-family:inherit}
+  .btn--primary{background:#4f46e5;color:#fff;border-color:#4f46e5}
+  .btn--primary:hover{background:#4338ca}
+  .btn--outline{background:#fff;color:#374151;border-color:#d1d5db}
+  .btn--outline:hover{background:#f9fafb}
+  .btn--danger{background:#fff;color:#dc2626;border-color:#fca5a5}
+  .btn--danger:hover{background:#fee2e2}
+  .btn--warn{background:#fff;color:#d97706;border-color:#fde68a}
+  .btn--warn:hover{background:#fffbeb}
+  .btn--sm{padding:6px 14px;font-size:13px}
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:20px}
+  .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+  .card-title{font-size:16px;font-weight:600;color:#111827;margin:0}
+  /* Search */
+  .search-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .search-input{flex:1;min-width:200px;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 14px;font-size:14px;color:#111827;outline:none;font-family:inherit;transition:border-color .15s}
+  .search-input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+  .search-select{border:1.5px solid #d1d5db;border-radius:8px;padding:10px 14px;font-size:14px;color:#111827;outline:none;font-family:inherit;background:#fff}
+  /* User result card */
+  .user-result{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f3f4f6;gap:10px;flex-wrap:wrap}
+  .user-result:last-child{border-bottom:none}
+  .user-avatar{width:38px;height:38px;border-radius:50%;background:#e0e7ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#4338ca;flex-shrink:0}
+  .user-info{flex:1;min-width:0}
+  .user-name{font-weight:600;color:#111827;font-size:14px}
+  .user-email{font-size:12px;color:#6b7280}
+  .user-role-tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}
+  .role--student{background:#d1fae5;color:#065f46}
+  .role--instructor{background:#fef3c7;color:#92400e}
+  /* Collaborator table */
+  .collab-table{width:100%;border-collapse:collapse}
+  .collab-table th{text-align:left;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;padding:0 14px 10px;border-bottom:1px solid #e5e7eb}
+  .collab-table td{padding:12px 14px;border-bottom:1px solid #f3f4f6;vertical-align:middle;font-size:14px}
+  .collab-table tr:last-child td{border-bottom:none}
+  /* Status badges */
+  .status{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px}
+  .status--accepted{background:#d1fae5;color:#065f46}
+  .status--rejected{background:#fee2e2;color:#991b1b}
+  .status--pending{background:#fef3c7;color:#92400e}
+  .status--unsent{background:#f3f4f6;color:#6b7280}
+  .no-results{text-align:center;padding:24px;color:#9ca3af;font-size:13px}
+  /* Toast */
+  .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast--success{background:#10b981;color:#fff}
+  .toast--info{background:#3b82f6;color:#fff}
+  .toast--warn{background:#f59e0b;color:#fff}
+  .actions-row{display:flex;gap:6px}
+  .info-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;font-size:13px;color:#1d4ed8;margin-bottom:20px}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__brand">
+    <span class="navbar__logo">GUC</span>
+    <span class="navbar__title">PortfolioHub</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="navbar__badge">Student</span>
+    <span class="navbar__name">Ali Hassan (Project Creator)</span>
+  </div>
+</nav>
+
+<div class="page">
+  <a href="index.html" class="back">← Back to Requirements Index</a>
+
+  <div class="req-tags">
+    <span class="req-tag">Req 25 — Search collaborators/instructors by name or email</span>
+    <span class="req-tag">Req 26 — Send/cancel invitations</span>
+    <span class="req-tag">Req 27 — View collaborators with invitation status</span>
+    <span class="req-tag">Req 31 — Remove a collaborator (creator only)</span>
+  </div>
+
+  <div class="dash-header">
+    <h1 class="dash-title">Collaborators</h1>
+    <p class="dash-sub">Project: <strong>E-Commerce Platform</strong> &nbsp;·&nbsp; Software Engineering</p>
+  </div>
+
+  <div class="info-banner">
+    ℹ️ As the <strong>project creator</strong>, you can search for students and course instructors, send invitations, and manage your team. Only course instructors assigned to this course can be invited.
+  </div>
+
+  <!-- Search (Req 25) -->
+  <div class="card">
+    <div class="card-header-row">
+      <h2 class="card-title">Search & Invite &nbsp;<span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:2px 8px;border-radius:99px">Req 25 · Req 26</span></h2>
+    </div>
+    <div class="search-row">
+      <input class="search-input" id="searchInput" type="text" placeholder="Search by first name, last name, or email..." oninput="filterUsers()">
+      <select class="search-select" id="roleFilter" onchange="filterUsers()">
+        <option value="">All Roles</option>
+        <option value="student">Student</option>
+        <option value="instructor">Course Instructor</option>
+      </select>
+    </div>
+    <div id="searchResults"></div>
+  </div>
+
+  <!-- Current collaborators (Req 27 + Req 31) -->
+  <div class="card">
+    <div class="card-header-row">
+      <h2 class="card-title">Team Members &nbsp;<span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:2px 8px;border-radius:99px">Req 27 · Req 31</span></h2>
+      <span style="font-size:13px;color:#6b7280" id="memberCount"></span>
+    </div>
+    <table class="collab-table">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Role</th>
+          <th>Invitation Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="collabTbody"></tbody>
+    </table>
+    <div id="emptyCollab" style="text-align:center;padding:32px;color:#9ca3af;display:none">
+      <div style="font-size:32px;margin-bottom:8px">👥</div>
+      <div style="font-weight:600">No team members yet</div>
+      <div style="font-size:13px">Search and invite collaborators above.</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ALL_USERS = [
+  {id:'s2',role:'student',firstName:'Sara',lastName:'Ahmed',email:'sara.ahmed@student.guc.edu.eg'},
+  {id:'s3',role:'student',firstName:'Omar',lastName:'Khalil',email:'omar.khalil@student.guc.edu.eg'},
+  {id:'s4',role:'student',firstName:'Laila',lastName:'Mahmoud',email:'laila.mahmoud@student.guc.edu.eg'},
+  {id:'s5',role:'student',firstName:'Hassan',lastName:'Ibrahim',email:'hassan.ibrahim@student.guc.edu.eg'},
+  {id:'i1',role:'instructor',firstName:'Dr. Sara',lastName:'Mohamed',email:'sara.mohamed@guc.edu.eg'},
+  {id:'i2',role:'instructor',firstName:'Dr. Karim',lastName:'Abdelaziz',email:'karim.abdelaziz@guc.edu.eg'},
+  {id:'i3',role:'instructor',firstName:'Dr. Aya',lastName:'Salama',email:'aya.salama@guc.edu.eg'},
+];
+
+let invitations = [
+  {userId:'s2',status:'accepted',sentAt:'2026-03-10'},
+  {userId:'i1',status:'accepted',sentAt:'2026-03-10'},
+  {userId:'s3',status:'pending',sentAt:'2026-03-15'},
+  {userId:'s4',status:'rejected',sentAt:'2026-03-12'},
+];
+
+function getStatus(userId){
+  const inv = invitations.find(i=>i.userId===userId);
+  return inv?inv.status:null;
+}
+
+function filterUsers(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const role = document.getElementById('roleFilter').value;
+  const results = document.getElementById('searchResults');
+
+  if(!q&&!role){results.innerHTML='<div class="no-results">Type a name or email to search for collaborators.</div>';return;}
+
+  const filtered = ALL_USERS.filter(u=>{
+    const matchRole = !role||u.role===role;
+    const matchQ = !q||(u.firstName+' '+u.lastName+' '+u.email).toLowerCase().includes(q);
+    return matchRole&&matchQ;
+  });
+
+  if(filtered.length===0){results.innerHTML='<div class="no-results">No users found matching your search.</div>';return;}
+
+  results.innerHTML = filtered.map(u=>{
+    const status = getStatus(u.id);
+    const name = u.firstName+' '+u.lastName;
+    const initial = u.firstName[0];
+    let actionBtn = '';
+    if(!status){
+      actionBtn = `<button class="btn btn--primary btn--sm" onclick="sendInvite('${u.id}')">Send Invitation</button>`;
+    } else if(status==='pending'){
+      actionBtn = `<button class="btn btn--warn btn--sm" onclick="cancelInvite('${u.id}')">Cancel Invitation</button>`;
+    } else if(status==='accepted'){
+      actionBtn = `<button class="btn btn--outline btn--sm" disabled>✓ Joined</button>`;
+    } else if(status==='rejected'){
+      actionBtn = `<button class="btn btn--primary btn--sm" onclick="sendInvite('${u.id}')">Re-invite</button>`;
+    }
+    return `
+      <div class="user-result">
+        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+          <div class="user-avatar">${initial}</div>
+          <div class="user-info">
+            <div class="user-name">${name}</div>
+            <div class="user-email">${u.email}</div>
+          </div>
+          <span class="user-role-tag ${u.role==='student'?'role--student':'role--instructor'}">${u.role==='student'?'Student':'Instructor'}</span>
+        </div>
+        <div style="flex-shrink:0">${actionBtn}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function sendInvite(userId){
+  const existing = invitations.find(i=>i.userId===userId);
+  if(existing)invitations = invitations.filter(i=>i.userId!==userId);
+  invitations.push({userId,status:'pending',sentAt:new Date().toISOString().slice(0,10)});
+  const u = ALL_USERS.find(x=>x.id===userId);
+  showToast(`Invitation sent to ${u.firstName} ${u.lastName}!`,'success');
+  filterUsers();
+  renderCollabs();
+}
+
+function cancelInvite(userId){
+  invitations = invitations.filter(i=>i.userId!==userId);
+  const u = ALL_USERS.find(x=>x.id===userId);
+  showToast(`Invitation to ${u.firstName} ${u.lastName} cancelled.`,'info');
+  filterUsers();
+  renderCollabs();
+}
+
+function removeMember(userId){
+  const u = ALL_USERS.find(x=>x.id===userId);
+  if(!confirm(`Remove ${u.firstName} ${u.lastName} from this project?`))return;
+  invitations = invitations.filter(i=>i.userId!==userId);
+  showToast(`${u.firstName} ${u.lastName} removed from the project.`,'info');
+  filterUsers();
+  renderCollabs();
+}
+
+function renderCollabs(){
+  const tbody = document.getElementById('collabTbody');
+  const empty = document.getElementById('emptyCollab');
+  const count = document.getElementById('memberCount');
+  const members = invitations.map(inv=>{
+    const u = ALL_USERS.find(x=>x.id===inv.userId);
+    return {...inv,user:u};
+  }).filter(x=>x.user);
+
+  count.textContent = `${members.length} member${members.length!==1?'s':''}`;
+
+  if(members.length===0){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+
+  tbody.innerHTML = members.map(m=>{
+    const name = m.user.firstName+' '+m.user.lastName;
+    const initial = m.user.firstName[0];
+    const statusClass = {accepted:'status--accepted',rejected:'status--rejected',pending:'status--pending'}[m.status]||'status--unsent';
+    const statusLabel = {accepted:'Accepted',rejected:'Rejected',pending:'Awaiting Reply'}[m.status]||'No Reply';
+    return `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="user-avatar" style="width:32px;height:32px;font-size:13px">${initial}</div>
+            <div>
+              <div style="font-weight:600">${name}</div>
+              <div style="font-size:12px;color:#6b7280">${m.user.email}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="user-role-tag ${m.user.role==='student'?'role--student':'role--instructor'}">${m.user.role==='student'?'Student':'Instructor'}</span></td>
+        <td><span class="status ${statusClass}">${statusLabel}</span><br><span style="font-size:11px;color:#9ca3af">Sent ${m.sentAt}</span></td>
+        <td>
+          <div class="actions-row">
+            ${m.status==='pending'?`<button class="btn btn--warn btn--sm" onclick="cancelInvite('${m.userId}')">Cancel</button>`:''}
+            ${m.status==='accepted'?`<button class="btn btn--danger btn--sm" onclick="removeMember('${m.userId}')">Remove</button>`:''}
+            ${m.status==='rejected'?`<button class="btn btn--primary btn--sm" onclick="sendInvite('${m.userId}')">Re-invite</button>`:''}
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=`toast toast--${type} show`;
+  setTimeout(()=>t.className='toast',3500);
+}
+
+// Init
+document.getElementById('searchResults').innerHTML='<div class="no-results">Type a name or email to search for collaborators.</div>';
+renderCollabs();
+</script>
+</body>
+</html>

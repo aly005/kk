@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project Invitations — GUC PortfolioHub</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.5;color:#111827;background:#f9fafb;-webkit-font-smoothing:antialiased}
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .navbar__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .navbar__logo{background:#4f46e5;color:#fff;font-weight:700;font-size:13px;padding:4px 8px;border-radius:6px;letter-spacing:1px}
+  .navbar__title{font-weight:600;font-size:16px;color:#111827}
+  .navbar__badge{font-size:11px;font-weight:600;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:#e0e7ff;color:#4338ca}
+  .navbar__name{font-size:14px;font-weight:500;color:#374151}
+  .notif-dot{display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:50%;margin-left:4px;vertical-align:middle}
+  .page{max-width:800px;margin:0 auto;padding:32px 24px 60px}
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:#4f46e5;text-decoration:none;font-weight:500;margin-bottom:20px}
+  .back:hover{text-decoration:underline}
+  .req-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+  .req-tag{font-size:12px;font-weight:600;background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:99px}
+  .dash-header{margin-bottom:28px}
+  .dash-title{font-size:28px;font-weight:700;color:#111827;margin:0 0 4px}
+  .dash-sub{font-size:14px;color:#6b7280;margin:0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;font-family:inherit}
+  .btn--primary{background:#4f46e5;color:#fff;border-color:#4f46e5}
+  .btn--primary:hover{background:#4338ca}
+  .btn--outline{background:#fff;color:#374151;border-color:#d1d5db}
+  .btn--outline:hover{background:#f9fafb}
+  .btn--danger{background:#fff;color:#dc2626;border-color:#fca5a5}
+  .btn--danger:hover{background:#fee2e2}
+  .btn--success{background:#10b981;color:#fff;border-color:#10b981}
+  .btn--success:hover{background:#059669}
+  .btn--sm{padding:7px 16px;font-size:13px}
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:20px}
+  .card-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+  .card-title{font-size:16px;font-weight:600;color:#111827;margin:0}
+  /* Notification banner */
+  .notif-banner{background:linear-gradient(135deg,#ede9fe,#e0f2fe);border:1px solid #c7d2fe;border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:14px}
+  .notif-banner__icon{font-size:28px;flex-shrink:0}
+  .notif-banner__text strong{display:block;font-size:15px;font-weight:700;color:#3730a3;margin-bottom:2px}
+  .notif-banner__text span{font-size:13px;color:#4338ca}
+  /* Invitation card */
+  .inv-card{border:1px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-bottom:12px;background:#fff;transition:box-shadow .15s}
+  .inv-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+  .inv-card--new{border-color:#c7d2fe;background:#f5f3ff}
+  .inv-card__top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .inv-card__info{flex:1;min-width:0}
+  .inv-card__project{font-size:16px;font-weight:700;color:#111827;margin:0 0 4px}
+  .inv-card__from{font-size:13px;color:#6b7280;margin:0 0 6px}
+  .inv-card__meta{font-size:12px;color:#9ca3af}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px}
+  .tag--bachelor{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+  .tag--course{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe}
+  .tag--new{background:#ddd6fe;color:#5b21b6;font-size:10px;padding:2px 7px}
+  /* Status */
+  .status{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px}
+  .status--accepted{background:#d1fae5;color:#065f46}
+  .status--rejected{background:#fee2e2;color:#991b1b}
+  .status--pending{background:#fef3c7;color:#92400e}
+  .inv-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  /* Filter tabs */
+  .filter-tabs{display:flex;gap:6px;background:#f3f4f6;border-radius:10px;padding:4px;margin-bottom:20px;width:fit-content}
+  .filter-tab{border:none;background:none;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:#6b7280;transition:all .15s;font-family:inherit}
+  .filter-tab--active{background:#fff;color:#4f46e5;box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
+  /* Toast */
+  .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast--success{background:#10b981;color:#fff}
+  .toast--info{background:#3b82f6;color:#fff}
+  .toast--warn{background:#f59e0b;color:#fff}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__brand">
+    <span class="navbar__logo">GUC</span>
+    <span class="navbar__title">PortfolioHub</span>
+  </a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="display:flex;align-items:center;gap:4px;font-size:14px;color:#374151;font-weight:500">
+      📬 Invitations <span class="notif-dot" id="navDot"></span>
+    </div>
+    <span class="navbar__badge">Student</span>
+    <span class="navbar__name">Sara Ahmed</span>
+  </div>
+</nav>
+
+<div class="page">
+  <a href="index.html" class="back">← Back to Requirements Index</a>
+
+  <div class="req-tags">
+    <span class="req-tag">Req 28 — Receive notification when invited to a project</span>
+    <span class="req-tag">Req 29 — View list of project invitations</span>
+    <span class="req-tag">Req 30 — Accept/Reject project invitations</span>
+  </div>
+
+  <div class="dash-header">
+    <h1 class="dash-title">Project Invitations</h1>
+    <p class="dash-sub">Review and respond to project collaboration requests</p>
+  </div>
+
+  <!-- Notification banner (Req 28) -->
+  <div class="notif-banner" id="notifBanner">
+    <div class="notif-banner__icon">🔔</div>
+    <div class="notif-banner__text">
+      <strong>You have new invitations!</strong>
+      <span>You received <span id="newCount"></span> new project invitation(s). Review them below.</span>
+    </div>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs">
+    <button class="filter-tab filter-tab--active" onclick="setFilter('all',this)">All <span id="tabAll"></span></button>
+    <button class="filter-tab" onclick="setFilter('pending',this)">Pending <span id="tabPending"></span></button>
+    <button class="filter-tab" onclick="setFilter('accepted',this)">Accepted <span id="tabAccepted"></span></button>
+    <button class="filter-tab" onclick="setFilter('rejected',this)">Rejected <span id="tabRejected"></span></button>
+  </div>
+
+  <!-- Invitations list (Req 29) -->
+  <div id="invList"></div>
+  <div id="emptyInv" style="text-align:center;padding:40px;color:#9ca3af;display:none">
+    <div style="font-size:36px;margin-bottom:8px">📭</div>
+    <div style="font-weight:600">No invitations here</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let invitations = [
+  {id:'inv1',project:'E-Commerce Platform',course:'Software Engineering',type:'course',fromName:'Ali Hassan',fromEmail:'ali.hassan@student.guc.edu.eg',sentAt:'2026-04-28',status:'pending',isNew:true},
+  {id:'inv2',project:'Smart Campus Navigation',course:'Bachelor Project',type:'bachelor',fromName:'Youssef Tamer',fromEmail:'youssef.tamer@student.guc.edu.eg',sentAt:'2026-04-25',status:'pending',isNew:true},
+  {id:'inv3',project:'ML Image Classifier',course:'Machine Learning',type:'course',fromName:'Laila Mahmoud',fromEmail:'laila.mahmoud@student.guc.edu.eg',sentAt:'2026-04-10',status:'accepted',isNew:false},
+  {id:'inv4',project:'Network Packet Analyzer',course:'Computer Networks',type:'course',fromName:'Omar Khalil',fromEmail:'omar.khalil@student.guc.edu.eg',sentAt:'2026-03-20',status:'rejected',isNew:false},
+];
+let activeFilter = 'all';
+
+function setFilter(f,el){
+  activeFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('filter-tab--active'));
+  el.classList.add('filter-tab--active');
+  render();
+}
+
+function accept(id){
+  invitations = invitations.map(i=>i.id===id?{...i,status:'accepted',isNew:false}:i);
+  const inv = invitations.find(i=>i.id===id);
+  showToast(`Accepted invitation for "${inv.project}"!`,'success');
+  render();
+}
+
+function reject(id){
+  if(!confirm('Reject this invitation?'))return;
+  invitations = invitations.map(i=>i.id===id?{...i,status:'rejected',isNew:false}:i);
+  const inv = invitations.find(i=>i.id===id);
+  showToast(`Rejected invitation for "${inv.project}".`,'info');
+  render();
+}
+
+function render(){
+  const filtered = activeFilter==='all'?invitations:invitations.filter(i=>i.status===activeFilter);
+  const list = document.getElementById('invList');
+  const empty = document.getElementById('emptyInv');
+  const newCount = invitations.filter(i=>i.isNew).length;
+  const banner = document.getElementById('notifBanner');
+  const navDot = document.getElementById('navDot');
+
+  // Update counts
+  document.getElementById('newCount').textContent = newCount;
+  document.getElementById('tabAll').textContent = `(${invitations.length})`;
+  document.getElementById('tabPending').textContent = `(${invitations.filter(i=>i.status==='pending').length})`;
+  document.getElementById('tabAccepted').textContent = `(${invitations.filter(i=>i.status==='accepted').length})`;
+  document.getElementById('tabRejected').textContent = `(${invitations.filter(i=>i.status==='rejected').length})`;
+
+  banner.style.display = newCount>0?'flex':'none';
+  navDot.style.display = newCount>0?'inline-block':'none';
+
+  if(filtered.length===0){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+
+  list.innerHTML = filtered.map(inv=>{
+    const statusClass = {accepted:'status--accepted',rejected:'status--rejected',pending:'status--pending'}[inv.status];
+    const statusLabel = {accepted:'Accepted',rejected:'Rejected',pending:'Pending'}[inv.status];
+    return `
+      <div class="inv-card ${inv.isNew?'inv-card--new':''}">
+        <div class="inv-card__top">
+          <div class="inv-card__info">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+              <p class="inv-card__project">${inv.project}</p>
+              ${inv.isNew?'<span class="tag tag--new">NEW</span>':''}
+              <span class="tag ${inv.type==='bachelor'?'tag--bachelor':'tag--course'}">${inv.type==='bachelor'?'Bachelor Project':'Course Project'}</span>
+            </div>
+            <p class="inv-card__from">From <strong>${inv.fromName}</strong> &lt;${inv.fromEmail}&gt;</p>
+            <p class="inv-card__from" style="margin-top:2px">Course: <strong>${inv.course}</strong></p>
+            <p class="inv-card__meta">Sent on ${inv.sentAt}</p>
+          </div>
+          <span class="status ${statusClass}">${statusLabel}</span>
+        </div>
+        ${inv.status==='pending'?`
+        <div class="inv-actions">
+          <button class="btn btn--success btn--sm" onclick="accept('${inv.id}')">✓ Accept</button>
+          <button class="btn btn--danger btn--sm" onclick="reject('${inv.id}')">✕ Reject</button>
+        </div>`:''}
+      </div>
+    `;
+  }).join('');
+}
+
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=`toast toast--${type} show`;
+  setTimeout(()=>t.className='toast',3500);
+}
+
+render();
+</script>
+</body>
+</html>
